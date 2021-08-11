@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace MartianRobots.Models
 {
@@ -70,6 +71,16 @@ namespace MartianRobots.Models
             }
 
             return commandsList;
+        }
+
+        public bool CheckValidAmountOfLines(string[] input)
+        {
+            return input.Length - 1 % 2 != 0;
+        }
+
+        public bool CheckSameCommandsAndRobots(List<Robot> robots, List<List<CommandEnum>> commands)
+        {
+            return robots.Count == commands.Count;
         }
 
         private static OrientationEnum GetOrientation(string orientation)

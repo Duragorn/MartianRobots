@@ -3,6 +3,7 @@ using MartianRobots.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace MartianRobots
 {
@@ -13,34 +14,41 @@ namespace MartianRobots
             InputManager inputManager = new InputManager();
             List<Robot> robots = new List<Robot>();
             List<List<CommandEnum>> commands = new List<List<CommandEnum>>();
+            OutputManager outputManager = new OutputManager();
 
             var input = inputManager.GetInput();
             var mars = inputManager.GetMarsFromInput(input[0]);
 
-            for (var index = 1; index < input.Length - 1; index++)
+            if (mars == null)
             {
-                if (index % 2 == 0)
+                outputManager.MarsError();
+            }
+
+            if (inputManager.CheckValidAmountOfLines(input))
+            {
+                for (var index = 1; index < input.Length - 1; index++)
                 {
-                    commands.Add(inputManager.GetCommandsFromInput(input[index]));
-                } 
-                else
-                {
-                    robots.Add(inputManager.GetRobotFromImput(input[index]));
+                    if (index % 2 == 0)
+                    {
+                        commands.Add(inputManager.GetCommandsFromInput(input[index]));
+                    }
+                    else
+                    {
+                        robots.Add(inputManager.GetRobotFromImput(input[index]));
+                    }
                 }
             }
 
 
-            for (var index = 0; index < robots.Count; index++)
+            if (inputManager.CheckSameCommandsAndRobots(robots, commands))
             {
-                robots[index].PerformCommands(commands[index], mars);
-            }
+                for (var index = 0; index < robots.Count; index++)
+                {
+                    if (robots[index] != null)
+                        robots[index].PerformCommands(commands[index], mars);
+                }
 
-            foreach(var robot in robots)
-            {
-                Console.WriteLine(robot.GetPosition().X + " " +
-                    robot.GetPosition().Y + " " +
-                    robot.GetOrientation() + " " +
-                    (robot.IsLost() ? "LOST" : ""));
+                outputManager.WriteOuput(robots);
             }
         }
     }

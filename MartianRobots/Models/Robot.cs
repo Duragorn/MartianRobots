@@ -7,22 +7,21 @@ namespace MartianRobots.Models
 {
     public class Robot
     {
-        private Coordinates position;
-        private OrientationEnum orientation;
-        private bool lost;
-
+        private Coordinates Position;
+        private OrientationEnum Orientation;
+        private bool Lost;
         public Robot(Coordinates coordinates, OrientationEnum orientation)
         {
             this.SetPosition(coordinates);
             this.SetOrientation(orientation);
-            this.lost = false;
+            this.Lost = false;
         }
 
         public void PerformCommands(List<CommandEnum> commands, Mars mars)
         {
             foreach (var command in commands)
             {
-                if (!lost)
+                if (!Lost)
                 {
                     if (command == CommandEnum.Forward)
                     {
@@ -50,7 +49,7 @@ namespace MartianRobots.Models
                 if (!mars.IsScentCoordinate(nextStep))
                 {
                     mars.AddScentCoordinate(nextStep);
-                    lost = true;
+                    Lost = true;
                 }
             } 
             else
@@ -76,31 +75,23 @@ namespace MartianRobots.Models
 
         public Coordinates GetPosition()
         {
-            return position;
+            return Position;
         }
 
         private void SetPosition(Coordinates coordinates)
         {
-            this.position = coordinates;
-        }
-        private void SetXPosition(int newXPosition)
-        {
-            GetPosition().X = newXPosition;
+            this.Position = coordinates;
         }
 
-        private void SetYPosition(int newYPosition)
-        {
-            GetPosition().Y = newYPosition;
-        }
 
         public OrientationEnum GetOrientation()
         {
-            return orientation;
+            return Orientation;
         }
 
         private void SetOrientation(OrientationEnum orientation)
         {
-            this.orientation = orientation;
+            this.Orientation = orientation;
         }
 
         private Coordinates GetNextCoordinates()
@@ -129,7 +120,7 @@ namespace MartianRobots.Models
 
         public bool IsLost()
         {
-            return lost;
+            return Lost;
         }
 
     }
